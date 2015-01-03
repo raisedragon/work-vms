@@ -1,0 +1,1 @@
+此处存放mybatis文件，注：所有文件均要以Mapper.xml结尾，否则spring在加载时无法加载mybatis文件，如：userMapper.xml

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.winit.vms.order.dao.DemoOrderDao">
+	<sql id="Base_Column_List">
+		id,
+		orderNo,
+		orderStatus,
+		createTime,
+		operator,
+		orderFrom,
+		orderTo,
+		updateTime,
+		sellerOrderNo
+	</sql>
+
+	<select id="getDemoOrderByNO" parameterType="String"
+		resultType="com.winit.vms.order.entity.DemoOrderEntity">
+		select
+		<include refid="Base_Column_List" />
+		from oms_demo_order where orderNo=#{orderNo}
+
+	</select>
+</mapper>

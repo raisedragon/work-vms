@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.winit.vms.vendor.entity.Product">
+	<resultMap id="Product" type="com.winit.vms.vendor.entity.Product">
+		<id property="id" column="id_" jdbcType="NUMERIC"/>
+		<result property="name" column="name_" jdbcType="VARCHAR"/>
+		<result property="code" column="code_" jdbcType="VARCHAR"/>
+		<result property="description" column="description_" jdbcType="VARCHAR"/>
+		<result property="venderId" column="vender_id_" jdbcType="NUMERIC"/>
+		<result property="created" column="created_" jdbcType="TIMESTAMP"/>
+		<result property="createdBy" column="Created_By_" jdbcType="NUMERIC"/>
+		<result property="isActive" column="Is_Active_" jdbcType="VARCHAR"/>
+		<result property="updated" column="updated_" jdbcType="TIMESTAMP"/>
+		<result property="updatedBy" column="updated_by_" jdbcType="NUMERIC"/>
+		<result property="orgId" column="org_id_" jdbcType="NUMERIC"/>
+		<result property="transitTime" column="Transit_time_" jdbcType="NUMERIC"/>
+		<result property="firstTrackTime" column="First_track_time_" jdbcType="NUMERIC"/>
+	</resultMap>
+	
+	<insert id="create" parameterType="com.winit.vms.vendor.entity.Product">
+		INSERT INTO vms_ve_product
+		(id_,name_,code_,description_,vender_id_,created_,Created_By_,Is_Active_,updated_,updated_by_,org_id_,Transit_time_,First_track_time_)
+		VALUES 
+		(#{id,jdbcType=NUMERIC}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{venderId,jdbcType=NUMERIC}, #{created,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=NUMERIC}, #{isActive,jdbcType=VARCHAR}, #{updated,jdbcType=TIMESTAMP}, #{updatedBy,jdbcType=NUMERIC}, #{orgId,jdbcType=NUMERIC}, #{transitTime,jdbcType=NUMERIC}, #{firstTrackTime,jdbcType=NUMERIC})
+	</insert>
+	
+	<select id="get"   parameterType="java.lang.Long" resultMap="Product">
+		SELECT * FROM vms_ve_product 
+		WHERE 
+		id_=#{id}
+	</select>
+	
+	<select id="query" parameterType="java.util.Map" resultMap="Product">
+		SELECT * FROM vms_ve_product
+		<where>
+			<if test="whereSql!=null">
+				${whereSql}
+			</if>
+		</where>
+		<if test="orderBySql!=null">
+			ORDER BY ${orderBySql}
+		</if>
+	</select>
+	
+	<update id="update" parameterType="com.winit.vms.vendor.entity.Product">
+		UPDATE vms_ve_product SET
+		name_=#{name,jdbcType=VARCHAR},
+		code_=#{code,jdbcType=VARCHAR},
+		description_=#{description,jdbcType=VARCHAR},
+		vender_id_=#{venderId,jdbcType=NUMERIC},
+		created_=#{created,jdbcType=TIMESTAMP},
+		Created_By_=#{createdBy,jdbcType=NUMERIC},
+		Is_Active_=#{isActive,jdbcType=VARCHAR},
+		updated_=#{updated,jdbcType=TIMESTAMP},
+		updated_by_=#{updatedBy,jdbcType=NUMERIC},
+		org_id_=#{orgId,jdbcType=NUMERIC},
+		Transit_time_=#{transitTime,jdbcType=NUMERIC},
+		First_track_time_=#{firstTrackTime,jdbcType=NUMERIC}
+		WHERE
+		id_=#{id}
+	</update>
+	
+	<delete id="remove" parameterType="java.lang.Long">
+		DELETE FROM vms_ve_product 
+		WHERE
+		id_=#{id}
+	</delete>
+	
+	
+	<!-- Operate by criteria -->
+	
+	<select id="queryByCriteria" parameterType="com.winit.vms.vendor.query.ProductQuery$FindQuery" resultMap="Product">
+		SELECT RES.*
+		<include refid="queryByCriteriaSql" />
+		<include refid="orderByClauseSql"/>
+	</select>
+	
+	<select id="queryCountByCriteria" parameterType="com.winit.vms.vendor.query.ProductQuery$FindQuery" resultType="Long">
+		SELECT count(1)
+		<include refid="queryByCriteriaSql" />
+	</select>
+
+	<sql id="queryByCriteriaSql">
+		from vms_ve_product RES
+		<include refid="criteriaSql"/>
+	</sql>
+	<update id="updateByUpdateQuery" parameterType="com.winit.vms.vendor.query.ProductQuery$UpdateQuery">
+		UPDATE vms_ve_product RES
+		<include refid="updateDataCaluseSql"/>
+		<include refid="criteriaSql"/>
+	</update>
+	
+	<delete id="deleteByDeleteQuery" parameterType="com.winit.vms.vendor.query.ProductQuery$DeleteQuery">
+		DELETE FROM vms_ve_product 
+		<include refid="noPrefixCriteriaSql"/>
+	</delete>
+	
+	<sql id="criteriaSql">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and res.${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and res.${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and res.${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and res.${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+		<sql id="noPrefixCriteriaSql">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="updateDataCaluseSql">
+		<set>   
+			<foreach collection="updateClause.dataClauses" item="clause" separator=",">
+				${clause.property} #{clause.value}
+			</foreach>
+		</set>
+	</sql>
+	
+	<sql id="orderByClauseSql">
+		<if test="orderByClause.valid">
+			ORDER BY 
+			<foreach collection="orderByClause.orderBys" item="clause" separator=",">
+				${clause.property} ${clause.direction}
+			</foreach>
+		</if>
+	</sql>
+	
+</mapper>
